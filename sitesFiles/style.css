@@ -26,7 +26,14 @@ label{
     margin-bottom: 30px;/*this controls how high above the input box the text label is*/
     margin-top: 30px;
 }
-form div{
+.textbox{
     float: left;
     margin-left: 100px;/*this controls where in the form it is, the width of the form is the total pixels*/
+}
+form div button{
+    width: 100px;
+    clear: both;
+    color: purple;
+    margin-left: 308px;
+    margin-top: 30px;
 }
