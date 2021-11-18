@@ -16,6 +16,9 @@ function formsubmit(e){
     // add save to db.json somewhere and possibly a delete button
     noun.value = ""
 }
+
+const url = ''
+
 function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
     if(noun === 5 && adjective === 8 & superlative === "y" && adverb === "n"){
         //this is where the default fetch request for the initial picture will go, we change the default values to be whatever we want the picture to be
