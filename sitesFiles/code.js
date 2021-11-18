@@ -26,7 +26,19 @@ function formsubmit(e){
     adverb.value = "";
 }
 
-const url = ''
+//create variables for each piece of form input 
+const baseUrl = 'https://placekeanu.com/';
+
+//I'd like to rename the form #ids to make a little more sense to me I don't understand the naming 
+const valueOne = document.querySelector("")
+const valueTwo = document.querySelector("")
+const valueThree = document.querySelector("")
+const valueFour = document.querySelector("")
+
+//replace header image with the newly generated keanu image 
+const newImage = document.querySelector("#form-img");
+newImage.src = `${baseUrl}/${valueOne}/${valueTwo}/${valueThree}${valueFour}`
+
 
 function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
     if(noun === 5 && adjective === 8 && superlative === "y" && adverb === "n"){
@@ -104,6 +116,7 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
 function createMadLibs(noun, adjective, superlative, adverb){
     // here we update the mad libs with the new strings we got
 }
+<<<<<<< HEAD
 function delCurBut(event, r){
     event.preventDefault()
     document.querySelector("#form-img").src = "";
@@ -119,4 +132,15 @@ function delCurBut(event, r){
 }
 function removalContigency(r){
     fetch("http://localhost:3000/summoned-ones")
+=======
+
+
+document.querySelector("DOMContentLoaded", getDadJoke)
+
+const getDadJoke = () => {
+    fetch("https://api.adviceslip.com/advice") 
+    .then(r=>r.json())
+    .then(data=>console.log(data))
+
+>>>>>>> f3cdc06763f27a58258202c62196d5aebe9a9245
 }
