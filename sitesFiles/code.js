@@ -17,7 +17,19 @@ function formsubmit(e){
     noun.value = ""
 }
 
-const url = ''
+//create variables for each piece of form input 
+const baseUrl = 'https://placekeanu.com/';
+
+//I'd like to rename the form #ids to make a little more sense to me I don't understand the naming 
+// const valueOne = document.querySelector("")
+// const valueTwo = document.querySelector("")
+// const valueThree = document.querySelector("")
+// const valueFour = document.querySelector("")
+
+//replace header image with the newly generated keanu image 
+const newImage = document.querySelector("#form-img");
+// newImage.src = `${baseUrl}/${valueOne}/${valueTwo}/${valueThree}${valueFour}`
+
 
 function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
     if(noun === 5 && adjective === 8 & superlative === "y" && adverb === "n"){
