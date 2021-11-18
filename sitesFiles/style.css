@@ -1,3 +1,12 @@
+header {
+    background-color: rgba(102, 102, 102, 0.845);
+    padding: 30px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+  }
+
+
 form {
     margin: 0 auto;
     width: 700px;
@@ -37,3 +46,10 @@ form div button{
     margin-left: 308px;
     margin-top: 30px;
 }
+
+footer {
+    background-color: rgba(102, 102, 102, 0.845);
+    padding: 10px;
+    text-align: center;
+    color: white;
+  }
