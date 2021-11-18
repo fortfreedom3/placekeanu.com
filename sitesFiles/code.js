@@ -107,6 +107,7 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
                 deleteCurrentButton.addEventListener("click", e=>delCurBut(e, r))
                 document.querySelector("#image-section").append(deleteCurrentButton)
                 removalContigency(r)
+                createButtons(true)
             })
 
         })
@@ -116,11 +117,10 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
 function createMadLibs(noun, adjective, superlative, adverb){
     // here we update the mad libs with the new strings we got
 }
-<<<<<<< HEAD
 function delCurBut(event, r){
     event.preventDefault()
     document.querySelector("#form-img").src = "";
-    document.querySelector("#very-id").remove
+    document.querySelector("#very-id").remove()
     fetch(`http://localhost:3000/summoned-ones/${r.id}`, {
         method: "DELETE",
         headers : {
@@ -132,15 +132,46 @@ function delCurBut(event, r){
 }
 function removalContigency(r){
     fetch("http://localhost:3000/summoned-ones")
-=======
-
-
-document.querySelector("DOMContentLoaded", getDadJoke)
-
-const getDadJoke = () => {
-    fetch("https://api.adviceslip.com/advice") 
     .then(r=>r.json())
-    .then(data=>console.log(data))
-
->>>>>>> f3cdc06763f27a58258202c62196d5aebe9a9245
+    .then(r=>{
+        r.forEach(e=>{
+            if(e.furl === returned.furl && e.id != returned.id){
+                fetch(`http://localhost:3000/summoned-ones/${e.id}`,{
+                method: "DELETE",
+                headers : {
+                    "Content-Type" : "application/json"
+                }
+                })
+            }
+        })
+    })
+}
+function createButtons(ifClicked = false){
+    const lengthadjusted;
+    if(ifClicked){
+        lengthadjusted = 1;
+    }
+    else{
+        lengthadjusted = 0;
+    }
+    fetch("http://localhost:3000/summoned-ones")
+    .then(r=>r.json())
+    .then(r=>{
+        for(const i = 0; i < r.length - lengthadjusted; i++){
+            const funNewButton = document.createElement("button")
+            const date = r[i].timeassigned
+            funNewButton.textContent = `${date.year}-${date.month}-${date.day}-${date.hours}-${date.minutes}-${date.seconds}-${date.milliseconds}`
+            funNewButton.addEventListener("click", e=>summonKeanu2(e, r[i]))
+        }
+    })
+}
+function summonKeanu2(event, keanudata){
+    const newImage = document.querySelector("#form-img");
+    newImage.src = keanudata.furl;
+    const deleteCurrentButton = document.createElement("button");
+    deleteCurrentButton.textContent = "x";
+    deleteCurrentButton.id = "very-id"
+    deleteCurrentButton.addEventListener("click", e=>delCurBut(e, r))
+    document.querySelector("#image-section").append(deleteCurrentButton)
+    event.target.remove()
 }
