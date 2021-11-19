@@ -82,3 +82,7 @@ footer {
 #how-to-play {
     font-size: 14pt;
 }
+#turn-purple {
+    color: purple;
+    background-color: blue;
+}
