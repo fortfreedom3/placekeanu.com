@@ -1,43 +1,73 @@
 document.addEventListener("DOMContentLoaded", init)
+
+//create variables we want to reference on entire page 
 const baseUrl = 'https://placekeanu.com/';
+
+const madLibs = document.querySelector("#shabaw-form");
+madLibs.addEventListener("submit", formsubmit);
+
+//create variables for the text content from each form input
+const noun = form.querySelector("#noun").querySelector("input");
+const adjective = form.querySelector("#adjective").querySelector("input");
+const superlative = form.querySelector("#superlative").querySelector("input");
+const secondNoun = form.querySelector("#noun-Two").querySelector("input");
+
+//variables for where the mad-libs form values will be added
+const first = document.querySelector("#value-one");
+const second = document.querySelector("#value-two");
+const third = document.querySelector("#value-three");
+const fourth = document.querySelector("#value-four");
+
+
 function init(){
-    //we need an initial image loader here
-    document.querySelector("#submitbutton").addEventListener("click", (e)=>formsubmit(e))
     fetch("https://api.adviceslip.com/advice") 
     .then(r=>r.json())
-    .then(data=>console.log(data))
-    fetch("https://api.adviceslip.com/advice") 
-    .then(r=>r.json())
-    .then(data=>console.log(data))
+    .then(data=>{
+        console.log(data.slip.advice)
+        const adviceOne = document.querySelector("#advice-one");
+        adviceOne.textContent = data.slip.advice;
+    })
+    // couldn't get the second advice slip to generate so I deleted so as not to overcomplicate 
 }
+
+
 function formsubmit(e){
     e.preventDefault();
     const form = e.target.parentNode.parentNode.parentNode;
-    const noun = form.querySelector("#noun").querySelector("input");
-    const adjective = form.querySelector("#adjective").querySelector("input");
-    const superlative = form.querySelector("#superlative").querySelector("input");
-    const adverb = form.querySelector("#adverb").querySelector("input");
-    createMadLibs(noun.value, adjective.value, superlative.value, adverb.value);
-    summonKeanu(noun.value, adjective.value, superlative.value, adverb.value);
+    
+    console.log(noun.value, adjective.value, superlative.value, secondNoun.value);
+    debugger;
+    
+    function createMadLibs(){
+        debugger;
+        // here we update the mad libs with the new strings we got
+    
+        // first.textContent = `Keanu means "cool breeze over the ${noun}" in Hawaiian.` 
+        // second.textContent = `His breakthrough acting role came when he played time-travelling slacker 
+        // in the science fiction comedy Bill & Ted's ${adjective} Adventure (1989).`  
+        // third.textContent = `The release of John Wick (2014) was met with 
+        // positive reviews, with critics labeling it as one of Reeves' ${superlative} performances 
+        // and one of the best action films of 2014.`
+        // fourth.textContent = `The story focuses on John Wick (Reeves) 
+        // searching for the men who broke into his home, stole his ${secondNoun} and killed 
+        // his puppy, which was a last gift to him from his recently deceased wife.`
+    
+        // madLibs.append(first, second, third, fourth);
+    }
+    summonKeanu();
+
     // add save to db.json somewhere and possibly a delete button
     noun.value = "";
     adjective.value = "";
     superlative.value = "";
-    adverb.value = "";
+    secondNoun.value = "";
 }
 
-//create variables for each piece of form input 
-const baseUrl = 'https://placekeanu.com/';
 
-//I'd like to rename the form #ids to make a little more sense to me I don't understand the naming 
-const valueOne = document.querySelector("")
-const valueTwo = document.querySelector("")
-const valueThree = document.querySelector("")
-const valueFour = document.querySelector("")
 
-//replace header image with the newly generated keanu image 
-const newImage = document.querySelector("#form-img");
-newImage.src = `${baseUrl}/${valueOne}/${valueTwo}/${valueThree}${valueFour}`
+    
+
+
 
 
 function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
@@ -80,6 +110,7 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
             const newImage = document.querySelector("#form-img");
             console.log(newImage)
             newImage.src = `${baseUrl}/${numarr[0]}/${numarr[1]}/${numarr[2]}${numarr[3]}`
+
             fetch("http://localhost:3000/summoned-ones", {
                 method: "POST",
                 headers: {
@@ -114,9 +145,10 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
         //this is where the equations and then the fetch request would be
     }
 }
-function createMadLibs(noun, adjective, superlative, adverb){
-    // here we update the mad libs with the new strings we got
-}
+
+
+
+
 function delCurBut(event, r){
     event.preventDefault()
     document.querySelector("#form-img").src = "";
@@ -147,12 +179,12 @@ function removalContigency(r){
     })
 }
 function createButtons(ifClicked = false){
-    const lengthadjusted;
+    let lengthadjusted = 0;
     if(ifClicked){
-        lengthadjusted = 1;
+       let lengthadjusted = 1;
     }
     else{
-        lengthadjusted = 0;
+        let lengthadjusted = 0;
     }
     fetch("http://localhost:3000/summoned-ones")
     .then(r=>r.json())
@@ -165,6 +197,8 @@ function createButtons(ifClicked = false){
         }
     })
 }
+
+
 function summonKeanu2(event, keanudata){
     const newImage = document.querySelector("#form-img");
     newImage.src = keanudata.furl;
@@ -175,3 +209,8 @@ function summonKeanu2(event, keanudata){
     document.querySelector("#image-section").append(deleteCurrentButton)
     event.target.remove()
 }
+
+
+
+
+
