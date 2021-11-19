@@ -19,27 +19,40 @@
 
     </div>
     <main>
-        <form id="26">
+        <div id="instructions"> 
+            <h2>Instructions</h2>
+            <p id="how-to-play">
+                Remember Mad Libs©? 
+                <br>
+                The game where you fill out a list of words 
+                and create a fun story? Fill in the words below to generate some 
+                fun "facts" about Keanu Reeves. We'll even throw in another Keanu 
+                picture for you as your participation prize. 
+            </p>
+        </div>
+        
+
+        <form id="shabaw-form">
             <section>
                 <div class="textbox" id="noun">
-                    <label for="This">Great Shabaw</label>
-                    <input id="This" placeholder="2000" name="21"></input>
+                    <label for="This">Noun</label>
+                    <input id="This" placeholder="person, place, thing, etc." name="21"></input>
                 </div>
 
                 <div class="textbox" id="adjective">
-                    <label for="Great">Greater Shabaw</label>
-                    <input id="Great" placeholder="2000" name="222"></input>
+                    <label for="Great">Adjective</label>
+                    <input id="Great" placeholder="an adjective describes a noun" name="222"></input>
                 </div>
                 <br/>
             </section>
             <section>
                 <div class="textbox" id="superlative">
-                    <label for="23">Greatest Shabaw</label>
-                    <input id="23" placeholder="2000"></input>
+                    <label for="23">Superlative</label>
+                    <input id="23" placeholder="e.g. G.O.A.T. or the worst"></input>
                 </div>
-                <div class="textbox" id="adverb">
-                    <label for="24">Least Shabaw</label>
-                    <input id="24" placeholder="5000"></input>
+                <div class="textbox" id="noun-Two">
+                    <label for="24">Another Noun</label>
+                    <input id="24" placeholder="another noun please"></input>
                 </div>
                 <br/>
             </section>
@@ -48,21 +61,26 @@
                     <button id="submitbutton">Submit</button>
                 </div>
             </section>
-<<<<<<< HEAD
             <section id="image-section">
                 <img src="" id="form-img">
             </section>
-=======
-
-            <img src="" id="form-img">
-
->>>>>>> f3cdc06763f27a58258202c62196d5aebe9a9245
             <section>
-                <div>
+                <div id="mad-libs-div">
+                    <h2>Keanu Reeves Mad Libs</h2>
                      <!-- section for the Keanu Mad Libs to generate -->
-                    <p id="mad-libs"></p>
+                     <p id="value-one"></p>
+                     <p id="value-two"></p>
+                     <p id="value-three"></p>                     
+                     <p id="value-four"></p>
                 </div>
             </section>
+            <div>
+                <h4>Keanu's Final Words of Wisdom:</h4>
+                <p id="advice-one"></p>
+                <p id="disclaimer">This advice is not actually brought you to by Keanu. 
+                    It comes from <a href="https://api.adviceslip.com/advice">here</a>.</p>
+
+            </div>
         </form>
         <footer>
             <p>

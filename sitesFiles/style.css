@@ -7,7 +7,7 @@ header {
   }
 
 img {
-    padding: 30px;
+    padding: 10px;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -63,3 +63,22 @@ footer {
   #form-img{
       margin: auto;
   }
+
+  #disclaimer {
+      font-size: 10pt;
+      font-style: italic;
+  }
+
+  #mad-libs-div {
+      text-align: center;
+      padding: auto;
+  }
+
+  #instructions {
+    text-align: center;
+    padding: 30px;
+}
+
+#how-to-play {
+    font-size: 14pt;
+}
