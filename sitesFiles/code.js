@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", init)
 
 //create variables we want to reference on entire page 
 const baseUrl = 'https://placekeanu.com/';
+const jsUrl = "http://localhost:3000";
 
 function init(){
     document.querySelector("#submitbutton").addEventListener("click", (e)=>formsubmit(e))
@@ -12,6 +13,7 @@ function init(){
         const adviceOne = document.querySelector("#advice-one");
         adviceOne.textContent = data.slip.advice;
     })
+    createButtons(-1);
     // couldn't get the second advice slip to generate so I deleted so as not to overcomplicate 
 }
 
@@ -25,10 +27,8 @@ function formsubmit(e){
     const adjective = form.querySelector("#adjective").querySelector("input");
     const superlative = form.querySelector("#superlative").querySelector("input");
     const secondNoun = form.querySelector("#noun-Two").querySelector("input");
-    
-    createMadLibs(noun.value, adjective.value, superlative.value, secondNoun.value)
-    summonKeanu(noun.value, adjective.value, superlative.value, secondNoun.value);
-
+    createKeanu(noun.value, adjective.value, superlative.value, secondNoun.value);
+    // moved create mad libs to summon keanu, which is inside create keanu and activated upon button presses.
     // add save to db.json somewhere and possibly a delete button
     noun.value = "";
     adjective.value = "";
@@ -44,8 +44,6 @@ function createMadLibs(noun, adjective, superlative, secondNoun){
     const second = document.querySelector("#value-two");
     const third = document.querySelector("#value-three");
     const fourth = document.querySelector("#value-four");
-
-    console.log(noun, adjective, superlative, secondNoun);
     // here we update the mad libs with the new strings we got
 
     first.textContent = `Keanu means "cool breeze over the ${noun}" in Hawaiian.` 
@@ -62,12 +60,106 @@ function createMadLibs(noun, adjective, superlative, secondNoun){
 }
 
 
-function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
-    if(noun === 5 && adjective === 8 && superlative === "y" && adverb === "n"){
-        //this is where the default fetch request for the initial picture will go, we change the default values to be whatever we want the picture to be
-    }
-    else{
-        fetch("http://localhost:3000/random-alphabet")
+function summonKeanu(id){
+        fetch(`${jsUrl}/summoned-ones/${id}`)
+        .then(r=>r.json())
+        .then(r=>{
+            const newImage = document.querySelector("#form-img");
+            newImage.src = r.furl
+            const imgSec = document.querySelector("#image-section");
+            if(document.querySelector("#very-id")){
+                imgSec.removeChild(document.querySelector("#very-id"))
+            }
+            const deleteCurrentButton = document.createElement("button");
+            deleteCurrentButton.textContent = "x";
+            deleteCurrentButton.id = "very-id"
+            deleteCurrentButton.addEventListener("click", e=>delCurBut(e, r))
+            imgSec.append(deleteCurrentButton)
+            removalContigency(r)
+            createButtons(id)
+            createMadLibs(...r.words)
+        })
+}
+function delCurBut(event, r){
+    event.preventDefault()
+    document.querySelector("#form-img").src = "";
+    document.querySelector("#very-id").remove()
+    fetch(`http://localhost:3000/summoned-ones/${r.id}`, {
+        method: "DELETE",
+        headers : {
+            "Content-Type" : "application/json"
+        }
+    })
+    .then(r=>r.json())
+    .then(r=>console.log(r))
+
+}
+function removalContigency(returned){
+    fetch("http://localhost:3000/summoned-ones")
+    .then(r=>r.json())
+    .then(r=>{
+        for(const e in r){
+            if(e.furl === returned.furl && e.id != returned.id){
+                fetch(`http://localhost:3000/summoned-ones/${e.id}`,{
+                method: "DELETE",
+                headers : {
+                    "Content-Type" : "application/json"
+                }
+                })
+            }
+        }
+    })
+}
+function createButtons(ids){
+    fetch("http://localhost:3000/summoned-ones")
+    .then(r=>r.json())
+    .then(r=>{
+        const ul = document.querySelector("#re-summon");
+        ul.innerHTML = ""
+        for(const object in r){
+            console.log(ids)
+            console.log(r[object].id)
+            if(r[object].id != ids){
+                const funNewButton = document.createElement("button")
+                const date = r[object].timeassigned
+                funNewButton.textContent = `${date.year}-${date.month}-${date.day}-${date.hours}-${date.minutes}-${date.seconds}-${date.milliseconds}`
+                funNewButton.addEventListener("click", e=>summonKeanu(r[object].id))
+                const newLi = document.createElement("li");
+                funNewButton.id = "turn-purple"
+                newLi.append(funNewButton)
+                document.querySelector("#re-summon").append(newLi)
+            }
+        }
+    })
+}
+
+
+function findKeanu(dateOrWords, ifdate){
+    fetch(jsUrl + "/summoned-ones")
+    .then(r=>r.json())
+    .then(r=>{
+        if(ifdate === false){
+            for(const keanu in r){
+                if(keanu.words === dateOrWords){
+                    return keanu.id
+                }
+            }
+        }
+        else{
+            for(const keanu in r){
+                const date = keanu.timeassigned;
+                if(`${date.year}-${date.month}-${date.day}-${date.hours}-${date.minutes}-${date.seconds}-${date.milliseconds}` === dateOrWords){
+                    return keanu.id
+                }
+            }
+        }
+    })
+}
+
+
+
+function createKeanu(noun, adjective, superlative, verb){
+    fetch("http://localhost:3000/random-alphabet")
         .then(r=>r.json())
         .then(r=>{
             const summonArr = [];
@@ -75,7 +167,6 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
             arg.forEach(e=>{
                 summonArr.push(e.slice(-2))
             })
-            console.log(summonArr)
             for(let i = 0; i < 2; i++){
                 const a = summonArr[i].slice(-1).toLowerCase().charCodeAt(0) - 97;
                 const b = summonArr[i].slice(-2, 1).toLowerCase().charCodeAt(0) - 97;
@@ -96,22 +187,14 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
             return [summonArr, arg] //changed the return to return both the random number and words for storage reasons...
         })
         .then(r=>{
-            console.log(r)
-            const numarr = r[0];
-            const wordarr = r[1];
-            console.log(wordarr);
-            const newImage = document.querySelector("#form-img");
-            console.log(newImage)
-            newImage.src = `${baseUrl}/${numarr[0]}/${numarr[1]}/${numarr[2]}${numarr[3]}`
-
-            fetch("http://localhost:3000/summoned-ones", {
+            fetch(`${jsUrl}/summoned-ones`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body : JSON.stringify({
-                    furl : newImage.src,
-                    words : wordarr,
+                    furl : `${baseUrl}/${r[0][0]}/${r[0][1]}/${r[0][2]}/${r[0][3]}`,
+                    words : r[1],
                     timeassigned : {
                         year : new Date().getFullYear(),
                         month : new Date().getMonth(),
@@ -125,95 +208,9 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
             })
             .then(r=>r.json())
             .then(r=>{
-                const deleteCurrentButton = document.createElement("button");
-                deleteCurrentButton.textContent = "x";
-                deleteCurrentButton.id = "very-id"
-                deleteCurrentButton.addEventListener("click", e=>delCurBut(e, r))
-                document.querySelector("#image-section").append(deleteCurrentButton)
-                removalContigency(r)
-                createButtons(true)
-            })
-
+                summonKeanu(r.id)})
         })
-        //this is where the equations and then the fetch request would be
-    }
 }
-
-
-
-
-function delCurBut(event, r){
-    event.preventDefault()
-    document.querySelector("#form-img").src = "";
-    document.querySelector("#very-id").remove()
-    fetch(`http://localhost:3000/summoned-ones/${r.id}`, {
-        method: "DELETE",
-        headers : {
-            "Content-Type" : "application/json"
-        }
-    })
-    .then(r=>r.json())
-    .then(r=>console.log(r))
-}
-function removalContigency(r){
-    fetch("http://localhost:3000/summoned-ones")
-    .then(r=>r.json())
-    .then(r=>{
-        r.forEach(e=>{
-            if(e.furl === returned.furl && e.id != returned.id){
-                fetch(`http://localhost:3000/summoned-ones/${e.id}`,{
-                method: "DELETE",
-                headers : {
-                    "Content-Type" : "application/json"
-                }
-                })
-            }
-        })
-    })
-}
-function createButtons(ifClicked = false){
-    let lengthadjusted = 0;
-    if(ifClicked){
-       let lengthadjusted = 1;
-    }
-    else{
-        let lengthadjusted = 0;
-    }
-    fetch("http://localhost:3000/summoned-ones")
-    .then(r=>r.json())
-    .then(r=>{
-        for(const i = 0; i < r.length - lengthadjusted; i++){
-            const funNewButton = document.createElement("button")
-            const date = r[i].timeassigned
-            funNewButton.textContent = `${date.year}-${date.month}-${date.day}-${date.hours}-${date.minutes}-${date.seconds}-${date.milliseconds}`
-            funNewButton.addEventListener("click", e=>summonKeanu2(e, r[i]))
-        }
-    })
-}
-
-
-function summonKeanu2(event, keanudata){
-    const newImage = document.querySelector("#form-img");
-    newImage.src = keanudata.furl;
-    const deleteCurrentButton = document.createElement("button");
-    deleteCurrentButton.textContent = "x";
-    deleteCurrentButton.id = "very-id"
-    deleteCurrentButton.addEventListener("click", e=>delCurBut(e, r))
-    document.querySelector("#image-section").append(deleteCurrentButton)
-    event.target.remove()
-}
-
-
-
-
-
-
-
-
-
-
-
-
 // document.addEventListener("DOMContentLoaded", init)
 
 // //create variables we want to reference on entire page 
