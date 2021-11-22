@@ -45,7 +45,6 @@ function createMadLibs(noun, adjective, superlative, secondNoun){
     const third = document.querySelector("#value-three");
     const fourth = document.querySelector("#value-four");
 
-    console.log(noun, adjective, superlative, secondNoun);
     // here we update the mad libs with the new strings we got
 
     first.textContent = `Keanu means "cool breeze over the ${noun}" in Hawaiian.` 
@@ -99,9 +98,7 @@ function summonKeanu(noun = 5, adjective = 8, superlative = "y", adverb = "n"){
             console.log(r)
             const numarr = r[0];
             const wordarr = r[1];
-            console.log(wordarr);
             const newImage = document.querySelector("#form-img");
-            console.log(newImage)
             newImage.src = `${baseUrl}/${numarr[0]}/${numarr[1]}/${numarr[2]}${numarr[3]}`
 
             fetch("http://localhost:3000/summoned-ones", {
